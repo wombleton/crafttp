@@ -1,9 +1,9 @@
 {
-  "name": "ptsd",
+  "name": "crafttp",
   "authors": [
     "Rowan Crawford <wombleton@gmail.com>"
   ],
-  "description": "Precise Transfer of Scope Data -- a version of $http that does not trigger updates of the $rootScope",
+  "description": "A version of $http that does not trigger updates of the $rootScope",
   "main": "index.js",
   "moduleType": [],
   "keywords": [

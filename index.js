@@ -182,10 +182,10 @@
     '{': /}$/
   };
   var JSON_PROTECTION_PREFIX = /^\)\]\}',?\n/;
-  var ptsdErr = Error;
-  var ptsdErrLegacyFn = function (method) {
+  var crafttpErr = Error;
+  var crafttpErrLegacyFn = function (method) {
     return function () {
-      throw ptsdErr('legacy', 'The method `{0}` on the promise returned from `ptsd` has been disabled.', method);
+      throw crafttpErr('legacy', 'The method `{0}` on the promise returned from `crafttp` has been disabled.', method);
     };
   };
 
@@ -299,14 +299,14 @@
 
   /**
    * @ngdoc provider
-   * @name PtsdProvider
+   * @name CrafttpProvider
    * @description
-   * Use `PtsdProvider` to change the default behavior of the {@link ptsd} service.
+   * Use `CrafttpProvider` to change the default behavior of the {@link crafttp} service.
    * */
-  function PtsdProvider () {
+  function CrafttpProvider () {
     /**
      * @ngdoc property
-     * @name PtsdProvider#defaults
+     * @name CrafttpProvider#defaults
      * @description
      *
      * Object containing default values for all {@link ng.$http $http} requests.
@@ -431,7 +431,7 @@
 
     this.$get = ['$httpBackend', '$$cookieReader', '$cacheFactory', '$$q', '$injector',
       function ($httpBackend, $$cookieReader, $cacheFactory, $$q, $injector) {
-        var defaultCache = $cacheFactory('ptsd');
+        var defaultCache = $cacheFactory('crafttp');
 
         /**
          * Make sure that default param serializer is exposed as a function
@@ -481,7 +481,7 @@
          *
          * ```js
          *   // Simple GET request example:
-         *   ptsd({
+         *   crafttp({
          *     method: 'GET',
          *     url: '/someUrl'
          *   }).then(function successCallback(response) {
@@ -577,7 +577,7 @@
          * ```
          *
          * In addition, you can supply a `headers` property in the config object passed when
-         * calling `ptsd(config)`, which overrides the defaults without changing them globally.
+         * calling `crafttp(config)`, which overrides the defaults without changing them globally.
          *
          * To explicitly remove a header automatically added via $httpProvider.defaults.headers on a per request basis,
          * Use the `headers` property, setting the desired header to `undefined`. For example:
@@ -592,7 +592,7 @@
          *  data: { test: 'test' }
          * }
          *
-         * ptsd(req).then(function(){...}, function(){...});
+         * crafttp(req).then(function(){...}, function(){...});
          * ```
          *
          * ## Transforming Requests and Responses
@@ -647,7 +647,7 @@
          *   return defaults.concat(transform);
          * }
          *
-         * ptsd({
+         * crafttp({
          *   url: '...',
          *   method: 'GET',
          *   transformResponse: appendTransform($http.defaults.transformResponse, function(value) {
@@ -911,7 +911,7 @@
               $scope.code = null;
               $scope.response = null;
 
-              ptsd({method: $scope.method, url: $scope.url, cache: $templateCache}).
+              crafttp({method: $scope.method, url: $scope.url, cache: $templateCache}).
                 then(function(response) {
                   $scope.status = response.status;
                   $scope.data = response.data;
@@ -963,7 +963,7 @@
   </file>
   </example>
          */
-        function ptsd (requestConfig) {
+        function crafttp (requestConfig) {
           if (!angular.isObject(requestConfig)) {
             throw Error('$http', 'badreq', 'Http request configuration must be an object.  Received: {0}', requestConfig);
           }
@@ -1039,8 +1039,8 @@
               return promise;
             };
           } else {
-            promise.success = ptsdErrLegacyFn('success');
-            promise.error = ptsdErrLegacyFn('error');
+            promise.success = crafttpErrLegacyFn('success');
+            promise.error = crafttpErrLegacyFn('error');
           }
 
           return promise;
@@ -1097,7 +1097,7 @@
           }
         }
 
-        ptsd.pendingRequests = [];
+        crafttp.pendingRequests = [];
 
         /**
          * @ngdoc method
@@ -1199,14 +1199,14 @@
          *
          * See "Setting HTTP Headers" and "Transforming Requests and Responses" sections above.
          */
-        ptsd.defaults = defaults;
+        crafttp.defaults = defaults;
 
-        return ptsd;
+        return crafttp;
 
         function createShortMethods (names) {
           angular.forEach(arguments, function (name) {
-            ptsd[name] = function (url, config) {
-              return ptsd(angular.extend({}, config || {}, {
+            crafttp[name] = function (url, config) {
+              return crafttp(angular.extend({}, config || {}, {
                 method: name,
                 url: url
               }));
@@ -1216,8 +1216,8 @@
 
         function createShortMethodsWithData (name) {
           angular.forEach(arguments, function (name) {
-            ptsd[name] = function (url, data, config) {
-              return ptsd(angular.extend({}, config || {}, {
+            crafttp[name] = function (url, data, config) {
+              return crafttp(angular.extend({}, config || {}, {
                 method: name,
                 url: url,
                 data: data
@@ -1239,7 +1239,7 @@
           var url = buildUrl(config.url, config.paramSerializer(config.params));
           var cache, cachedResp;
 
-          ptsd.pendingRequests.push(config);
+          crafttp.pendingRequests.push(config);
           promise.then(removePendingReq, removePendingReq);
 
           if ((config.cache || defaults.cache) && config.cache !== false &&
@@ -1332,8 +1332,8 @@
           }
 
           function removePendingReq () {
-            var idx = ptsd.pendingRequests.indexOf(config);
-            if (idx !== -1) ptsd.pendingRequests.splice(idx, 1);
+            var idx = crafttp.pendingRequests.indexOf(config);
+            if (idx !== -1) crafttp.pendingRequests.splice(idx, 1);
           }
         }
 
@@ -1347,11 +1347,11 @@
   }
 
   angular
-    .module('ptsd', ['ng'])
-    .provider('ptsd', PtsdProvider)
-    .config(['$httpProvider', 'ptsdProvider', function ($httpProvider, ptsdProvider) {
+    .module('crafttp', ['ng'])
+    .provider('crafttp', CrafttpProvider)
+    .config(['$httpProvider', 'crafttpProvider', function ($httpProvider, crafttpProvider) {
       angular.forEach($httpProvider.interceptors, function (interceptor) {
-        ptsdProvider.interceptors.push(interceptor);
+        crafttpProvider.interceptors.push(interceptor);
       });
     }]);
 })(window.angular);
