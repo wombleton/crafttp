@@ -5,8 +5,8 @@ It behaves as `$http` does, with all of its interceptors and so forth. However i
 
 ## Usage
 
-  ptsd({
-    method: 'GET',
-    scope: scope,
-    url: '/foo/bar'
-  });
+    ptsd({
+      method: 'GET',
+      scope: scope,
+      url: '/foo/bar'
+    });
