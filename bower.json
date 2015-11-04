@@ -5,6 +5,7 @@
   ],
   "description": "A version of $http that does not trigger updates of the $rootScope",
   "main": "index.js",
+  "version": "0.1.0",
   "moduleType": [],
   "keywords": [
     "angularjs",
