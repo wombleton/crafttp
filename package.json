@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/wombleton/ptsd/issues"
   },
-  "homepage": "https://github.com/wombleton/ptsd#readme"
+  "homepage": "https://github.com/wombleton/ptsd#readme",
+  "devDependencies": {
+    "minimist": "1.2.0"
+  }
 }
